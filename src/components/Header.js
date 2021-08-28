@@ -25,9 +25,9 @@ function Header({email, onSignOut}) {
             <Route exact path='/'>
                 <div className='header__text-wrapper'>
                     <p className='header__user-email'>{email}</p>
-                    <button className='header__link' onClick={onSignOut}>
+                    <Link className='header__link' onClick={onSignOut} to='/'>
                         Выйти
-                    </button>
+                    </Link>
                 </div>
             </Route>
         </Switch>

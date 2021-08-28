@@ -36,7 +36,6 @@ export const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
                 placeholder="Ссылка на аватар"
                 required
                 type="url"
-                defaultValue=""
                 value={avatar}
             />
             <span className="avatar-link-error popup__form-error"/>

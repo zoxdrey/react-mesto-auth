@@ -1,4 +1,4 @@
-import {API_OPTIONS, baseUrl, groupId} from "./constants";
+import {API_OPTIONS, baseAuthUrl, baseUrl, groupId} from "./constants";
 
 class Api {
     constructor(options) {
@@ -79,6 +79,36 @@ class Api {
 
     changeLikeCardStatus(cardId, isLiked) {
         return isLiked ? this.addLike(cardId) : this.removeLike(cardId)
+    }
+
+    signup(user) {
+        return fetch(`${baseAuthUrl}/signup`, {
+            method: 'POST',
+            ...this._options,
+            body: JSON.stringify(
+                user
+            )
+        }).then(this._checkResponse);
+    }
+
+    signin(user) {
+        return fetch(`${baseAuthUrl}/signin`, {
+            method: 'POST',
+            ...this._options,
+            body: JSON.stringify(
+                user
+            )
+        }).then(this._checkResponse);
+    }
+
+    getUserEmailByToken(token) {
+        return fetch(`${baseAuthUrl}/users/me`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        }).then(this._checkResponse);
     }
 }
 

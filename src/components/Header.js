@@ -1,20 +1,8 @@
 import headerLogo from "../images/logo.svg";
-import {useLocation} from "react-router";
-import {NavLink} from "react-router-dom";
+import {Route, Switch} from "react-router";
+import {Link} from "react-router-dom";
 
 function Header({email, onSignOut}) {
-
-    let {pathname} = useLocation()
-
-    const getHeaderLink = () => {
-        if (pathname === '/sign-in') {
-            return (<NavLink className={'header__link'} to={'/sign-up'}>Регистрация</NavLink>)
-        } else if (pathname === '/sign-up') {
-            return (<NavLink className={'header__link'} to={'/sign-in'}>Войти</NavLink>)
-        } else {
-            return (<NavLink className={'header__link'} to={'/sign-in'} onClick={onSignOut}>Выйти</NavLink>)
-        }
-    }
 
     return (<header className="header">
         <img
@@ -22,10 +10,27 @@ function Header({email, onSignOut}) {
             className="header__logo"
             src={headerLogo}
         />
-        <div className={'header__text-wrapper'}>
-            {email && (<div className={'header__user-email'}>{email}</div>)}
-            {getHeaderLink()}
-        </div>
+        <Switch>
+
+            <Route exact path='/sign-up'>
+                <Link className='header__link' to='/sign-in'>
+                    Войти
+                </Link>
+            </Route>
+            <Route exact path='/sign-in'>
+                <Link className='header__link' to='/sign-up'>
+                    Регистрация
+                </Link>
+            </Route>
+            <Route exact path='/'>
+                <div className='header__text-wrapper'>
+                    <p className='header__user-email'>{email}</p>
+                    <button className='header__link' onClick={onSignOut}>
+                        Выйти
+                    </button>
+                </div>
+            </Route>
+        </Switch>
     </header>)
 }
 

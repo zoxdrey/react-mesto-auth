@@ -36,6 +36,7 @@ export const Login = ({onSubmit}) => {
                 />
                 <span className="authorization-form__error"/>
                 <input
+                    type='password'
                     className="authorization-form__input"
                     id="password"
                     maxLength="20"

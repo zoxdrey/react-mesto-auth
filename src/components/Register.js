@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {NavLink} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 export const Register = ({onSubmit}) => {
 
@@ -37,6 +37,7 @@ export const Register = ({onSubmit}) => {
                 />
                 <span className="authorization-form__error"/>
                 <input
+                    type='password'
                     className="authorization-form__input"
                     id="password"
                     maxLength="20"
@@ -56,7 +57,7 @@ export const Register = ({onSubmit}) => {
                 </button>
                 <div className={'authorization-form__footer'}>
                     <p className={'authorization-form__footer-text'}>Уже зарегистрированы?</p>
-                    <NavLink className={'authorization-form__footer-link'} to={'/sign-in'}>Войти</NavLink>
+                    <Link className={'authorization-form__footer-link'} to={'/sign-in'}>Войти</Link>
                 </div>
             </form>
         </div>)

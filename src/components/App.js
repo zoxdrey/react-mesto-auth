@@ -12,9 +12,10 @@ import {AddPlacePopup} from "./AddPlacePopup";
 import {Route, Switch} from 'react-router-dom';
 import {Login} from "./Login";
 import {Register} from "./Register";
-import {useHistory} from "react-router";
+import {Redirect, useHistory} from "react-router";
 import ProtectedRoute from "./ProtectedRoute";
 import {InfoTooltip} from "./InfoTooltip";
+import authApi from "../utils/authApi";
 
 function App() {
 
@@ -33,21 +34,25 @@ function App() {
 
 
     useEffect(() => {
-        api.getUserInfo().then(data => {
-            setCurrentUser(data)
-        }).catch(err => handleResponseError(err))
-    }, [])
+        if (isLoggedIn) {
+            api.getUserInfo().then(data => {
+                setCurrentUser(data)
+            }).catch(err => handleResponseError(err))
+        }
+    }, [isLoggedIn])
 
     useEffect(() => {
-        api.getInitialCards().then(data => {
-            setCards(data);
-        }).catch(err => handleResponseError(err))
-    }, [])
+        if (isLoggedIn) {
+            api.getInitialCards().then(data => {
+                setCards(data);
+            }).catch(err => handleResponseError(err))
+        }
+    }, [isLoggedIn])
 
     useEffect(() => {
         const token = getUserToken();
         if (token) {
-            api.getUserEmailByToken(token).then((data) => {
+            authApi.getUserEmailByToken(token).then((data) => {
                     setEmail(data.data.email);
                     setIsLoggedIn(true);
                     history.push('/')
@@ -129,7 +134,7 @@ function App() {
     }
 
     function onRegister(user) {
-        api.signup(user).then((data) => {
+        authApi.signup(user).then((data) => {
             setIsRegistrationSuccess(true);
             setIsInfoTooltipOpen(true);
             history.push('/sign-in')
@@ -141,9 +146,9 @@ function App() {
     }
 
     function onLogin(user) {
-        api.signin(user).then(data => {
-            setIsLoggedIn(true);
+        authApi.signin(user).then(data => {
             localStorage.setItem('jwt', data.token);
+            setIsLoggedIn(true);
             setEmail(user.email);
             history.push('/');
         }).catch((err) => {
@@ -187,7 +192,9 @@ function App() {
                                             cards={cards}
                                             onCardLike={handleCardLike}
                                             onCardDelete={handleCardDelete}/>
-
+                            <Route path="*">
+                                {isLoggedIn ? <Redirect to="/"/> : <Redirect to="/sign-in"/>}
+                            </Route>
                         </Switch>
                         {isLoggedIn && <Footer/>}
 
@@ -214,7 +221,9 @@ function App() {
                         <ImagePopup card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen}/>
 
                         <InfoTooltip onClose={closeAllPopups} isOpen={isInfoTooltipOpen}
-                                     isRegistrationSuccess={isRegistrationSuccess}/>
+                                     isRegistrationSuccess={isRegistrationSuccess} infoMessage={isRegistrationSuccess ?
+                            "Вы успешно зарегистрировались" :
+                            "Что-то пошло не так\n Попробуйте еще раз."}/>
 
                     </CurrentUserContext.Provider>
                 </div>

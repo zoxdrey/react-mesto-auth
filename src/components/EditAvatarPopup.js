@@ -4,16 +4,15 @@ import React from "react";
 
 export const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
 
-    const [avatar, setAvatar] = React.useState('');
     const imageRef = React.useRef();
     const currentUser = React.useContext(CurrentUserContext);
 
     React.useEffect(() => {
-        setAvatar(currentUser?.avatar)
+        imageRef.current.value = currentUser?.avatar
     }, [currentUser]);
 
     React.useEffect(() => {
-        setAvatar('')
+        imageRef.current.value = ''
     }, [isOpen]);
 
     function handleSubmit(e) {
@@ -36,7 +35,6 @@ export const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
                 placeholder="Ссылка на аватар"
                 required
                 type="url"
-                value={avatar}
             />
             <span className="avatar-link-error popup__form-error"/>
         </PopupWithForm>)
